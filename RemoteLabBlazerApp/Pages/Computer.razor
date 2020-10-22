@@ -1,0 +1,73 @@
+﻿@page "/Data/Computer"
+
+@using DataAccess
+@using DataAccess.Models
+@using RemoteLabBlazerApp.Models
+
+@inject IComputerData _db
+
+<h4>Get a computer</h4>
+
+<button class="btn btn-primary" @onclick="OnButtonPress">Search</button>
+
+<h4>Your computer:</h4>
+
+@if (computers is null)
+{
+    <p><em>Loading...</em></p>
+}
+
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Computer</th>
+            </tr>
+        </thead>
+        <tbody>
+        @if (buttonPress == 1)
+        {
+        <tr>
+            <td>@selectedComputer.FQDN</td>
+        </tr>
+        }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<ComputerModel> computers;
+    //private DisplayComputerModel newComputer = new DisplayComputerModel();
+
+    private int buttonPress = 0;
+
+    private ComputerModel selectedComputer;
+
+    private async Task OnButtonPress()
+    {
+        string sql;
+        foreach (var computer in computers)
+        {
+            if (computer.RDPStatus == "Free")
+            {
+                selectedComputer = computer;
+                selectedComputer.RDPStatus = "Occupied";
+
+                await _db.UpdateComputer(selectedComputer);
+
+                await OnInitializedAsync();
+
+                break;
+            }
+        }
+        buttonPress = 1;
+
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        computers = await _db.GetComputer();
+    }
+
+}
