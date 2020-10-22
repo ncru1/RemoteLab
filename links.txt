@@ -1,0 +1,11 @@
+sql calls
+
+https://www.w3schools.com/sql/sql_update.asp
+
+blazer app and c# sql access
+
+https://www.youtube.com/watch?v=8DNgdphLvag&t=4343s
+
+sql connection strings
+
+https://www.connectionstrings.com/sql-server/

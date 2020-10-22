@@ -10,7 +10,7 @@
 
 <button class="btn btn-primary" @onclick="OnButtonPress">Search</button>
 
-<h4>Your computer:</h4>
+<h4>RDP link:</h4>
 
 @if (computers is null)
 {
@@ -28,9 +28,24 @@ else
         <tbody>
         @if (buttonPress == 1)
         {
-        <tr>
-            <td>@selectedComputer.FQDN</td>
-        </tr>
+            if (selectedComputer is null)
+            {
+              <tr>
+                <td>No computers are avaliable</td>
+            </tr>   
+            }
+            else
+            {
+            <tr>
+                <td>@selectedComputer.FQDN</td>
+            </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td>Press the Button</td>
+            </tr>  
         }
         </tbody>
     </table>
@@ -38,15 +53,20 @@ else
 
 @code {
     private List<ComputerModel> computers;
-    //private DisplayComputerModel newComputer = new DisplayComputerModel();
 
     private int buttonPress = 0;
 
     private ComputerModel selectedComputer;
 
+
+    protected override async Task OnInitializedAsync()
+    {
+        computers = await _db.GetComputer();
+    }
+
+
     private async Task OnButtonPress()
     {
-        string sql;
         foreach (var computer in computers)
         {
             if (computer.RDPStatus == "Free")
@@ -65,9 +85,6 @@ else
 
     }
 
-    protected override async Task OnInitializedAsync()
-    {
-        computers = await _db.GetComputer();
-    }
+
 
 }
