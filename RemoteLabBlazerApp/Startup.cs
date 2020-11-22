@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using RemoteLabBlazerApp.Data;
 using DataAccess;
 
 namespace RemoteLabBlazerApp
@@ -29,8 +28,7 @@ namespace RemoteLabBlazerApp
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            //services.AddSingleton<WeatherForecastService>();
-
+       
             services.AddTransient<ISqlDataAccess, SqlDataAccess>();
             services.AddTransient<IComputerData, ComputerData>();
         }
@@ -57,6 +55,7 @@ namespace RemoteLabBlazerApp
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapBlazorHub();
+                //endpoints.MapControllerRoute("mvc", "{controller}/{action}"); // added this line
                 endpoints.MapFallbackToPage("/_Host");
             });
         }
